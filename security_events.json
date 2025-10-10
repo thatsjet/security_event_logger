@@ -1,0 +1,313 @@
+{
+  "version": "1.0",
+  "events": {
+    "authn_login_success": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "INFO",
+      "description": "All login events should be recorded including success",
+      "parameters": ["userid"]
+    },
+    "authn_login_successafterfail": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "INFO",
+      "description": "The user successfully logged in after previously failing",
+      "parameters": ["userid", "retries"]
+    },
+    "authn_login_fail": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "WARN",
+      "description": "All login events should be recorded including failure",
+      "parameters": ["userid"]
+    },
+    "authn_login_fail_max": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "WARN",
+      "description": "User reached the login fail limit",
+      "parameters": ["userid", "maxlimit"]
+    },
+    "authn_login_lock": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "WARN",
+      "description": "The user account has been locked",
+      "parameters": ["userid", "reason"]
+    },
+    "authn_password_change": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "INFO",
+      "description": "User has changed their password",
+      "parameters": ["userid"]
+    },
+    "authn_password_change_fail": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "WARN",
+      "description": "User failed to change their password",
+      "parameters": ["userid"]
+    },
+    "authn_token_created": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "INFO",
+      "description": "A new authentication token was created",
+      "parameters": ["userid", "tokenid"]
+    },
+    "authn_token_revoked": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "INFO",
+      "description": "An authentication token was revoked",
+      "parameters": ["userid", "tokenid"]
+    },
+    "authn_token_reuse": {
+      "category": "Authentication",
+      "prefix": "authn",
+      "level": "WARN",
+      "description": "Attempted reuse of revoked or expired authentication token",
+      "parameters": ["userid", "tokenid"]
+    },
+    "authz_fail": {
+      "category": "Authorization",
+      "prefix": "authz",
+      "level": "WARN",
+      "description": "User attempted to access a resource they are not authorized for",
+      "parameters": ["userid", "resource"]
+    },
+    "authz_change": {
+      "category": "Authorization",
+      "prefix": "authz",
+      "level": "WARN",
+      "description": "User authorization was changed",
+      "parameters": ["userid", "onuserid", "newpermissions"]
+    },
+    "authz_admin": {
+      "category": "Authorization",
+      "prefix": "authz",
+      "level": "WARN",
+      "description": "Administrative privilege was used",
+      "parameters": ["userid", "resource"]
+    },
+    "excess_rate_limit_exceeded": {
+      "category": "Excessive Use",
+      "prefix": "excess",
+      "level": "WARN",
+      "description": "Rate limit was exceeded",
+      "parameters": ["userid", "max"]
+    },
+    "excess_sessions_exceeded": {
+      "category": "Excessive Use",
+      "prefix": "excess",
+      "level": "WARN",
+      "description": "User exceeded the maximum number of concurrent sessions",
+      "parameters": ["userid", "max"]
+    },
+    "file_upload": {
+      "category": "File Upload",
+      "prefix": "file",
+      "level": "INFO",
+      "description": "File was uploaded",
+      "parameters": ["userid", "filename", "size"]
+    },
+    "file_upload_fail": {
+      "category": "File Upload",
+      "prefix": "file",
+      "level": "WARN",
+      "description": "File upload failed",
+      "parameters": ["userid", "filename", "reason"]
+    },
+    "file_integrity_fail": {
+      "category": "File Upload",
+      "prefix": "file",
+      "level": "WARN",
+      "description": "File integrity check failed",
+      "parameters": ["userid", "filename"]
+    },
+    "input_validation_fail": {
+      "category": "Input Validation",
+      "prefix": "input",
+      "level": "WARN",
+      "description": "Input validation failed",
+      "parameters": ["userid", "input_field", "input_value"]
+    },
+    "malicious_excess": {
+      "category": "Malicious Behavior",
+      "prefix": "malicious",
+      "level": "WARN",
+      "description": "Potential malicious excessive use detected",
+      "parameters": ["userid", "metric", "value"]
+    },
+    "malicious_attack": {
+      "category": "Malicious Behavior",
+      "prefix": "malicious",
+      "level": "WARN",
+      "description": "Potential malicious attack detected",
+      "parameters": ["userid", "attack_type"]
+    },
+    "malicious_cors": {
+      "category": "Malicious Behavior",
+      "prefix": "malicious",
+      "level": "WARN",
+      "description": "Malicious CORS request detected",
+      "parameters": ["userid", "origin"]
+    },
+    "malicious_csrf": {
+      "category": "Malicious Behavior",
+      "prefix": "malicious",
+      "level": "WARN",
+      "description": "Potential CSRF attack detected",
+      "parameters": ["userid"]
+    },
+    "malicious_direct": {
+      "category": "Malicious Behavior",
+      "prefix": "malicious",
+      "level": "WARN",
+      "description": "Attempt to directly access internal object",
+      "parameters": ["userid", "object"]
+    },
+    "privilege_permissions_changed": {
+      "category": "Privilege Changes",
+      "prefix": "privilege",
+      "level": "WARN",
+      "description": "User permissions were changed",
+      "parameters": ["userid", "onuserid", "permission_changed"]
+    },
+    "sensitive_create": {
+      "category": "Sensitive Data",
+      "prefix": "sensitive",
+      "level": "WARN",
+      "description": "Sensitive data was created",
+      "parameters": ["userid", "data_type"]
+    },
+    "sensitive_read": {
+      "category": "Sensitive Data",
+      "prefix": "sensitive",
+      "level": "WARN",
+      "description": "Sensitive data was read",
+      "parameters": ["userid", "data_type"]
+    },
+    "sensitive_update": {
+      "category": "Sensitive Data",
+      "prefix": "sensitive",
+      "level": "WARN",
+      "description": "Sensitive data was updated",
+      "parameters": ["userid", "data_type"]
+    },
+    "sensitive_delete": {
+      "category": "Sensitive Data",
+      "prefix": "sensitive",
+      "level": "WARN",
+      "description": "Sensitive data was deleted",
+      "parameters": ["userid", "data_type"]
+    },
+    "sequence_fail": {
+      "category": "Sequence",
+      "prefix": "sequence",
+      "level": "WARN",
+      "description": "Sequence of operations was violated",
+      "parameters": ["userid", "sequence"]
+    },
+    "session_created": {
+      "category": "Session Management",
+      "prefix": "session",
+      "level": "INFO",
+      "description": "A new session was created",
+      "parameters": ["userid", "sessionid"]
+    },
+    "session_renewed": {
+      "category": "Session Management",
+      "prefix": "session",
+      "level": "INFO",
+      "description": "A session was renewed",
+      "parameters": ["userid", "sessionid"]
+    },
+    "session_expired": {
+      "category": "Session Management",
+      "prefix": "session",
+      "level": "INFO",
+      "description": "A session has expired",
+      "parameters": ["userid", "sessionid"]
+    },
+    "session_logout": {
+      "category": "Session Management",
+      "prefix": "session",
+      "level": "INFO",
+      "description": "User logged out",
+      "parameters": ["userid", "sessionid"]
+    },
+    "sys_startup": {
+      "category": "System Events",
+      "prefix": "sys",
+      "level": "WARN",
+      "description": "System started",
+      "parameters": ["userid"]
+    },
+    "sys_shutdown": {
+      "category": "System Events",
+      "prefix": "sys",
+      "level": "WARN",
+      "description": "System shut down",
+      "parameters": ["userid"]
+    },
+    "sys_restart": {
+      "category": "System Events",
+      "prefix": "sys",
+      "level": "WARN",
+      "description": "System restarted",
+      "parameters": ["userid"]
+    },
+    "sys_crash": {
+      "category": "System Events",
+      "prefix": "sys",
+      "level": "WARN",
+      "description": "System crashed",
+      "parameters": ["reason"]
+    },
+    "sys_monitor_disabled": {
+      "category": "System Events",
+      "prefix": "sys",
+      "level": "WARN",
+      "description": "System monitor was disabled",
+      "parameters": ["userid", "monitor"]
+    },
+    "sys_monitor_enabled": {
+      "category": "System Events",
+      "prefix": "sys",
+      "level": "WARN",
+      "description": "System monitor was enabled",
+      "parameters": ["userid", "monitor"]
+    },
+    "user_created": {
+      "category": "User Management",
+      "prefix": "user",
+      "level": "WARN",
+      "description": "A new user was created",
+      "parameters": ["userid", "newuserid", "attributes"]
+    },
+    "user_updated": {
+      "category": "User Management",
+      "prefix": "user",
+      "level": "WARN",
+      "description": "User information was updated",
+      "parameters": ["userid", "onuserid", "attributes"]
+    },
+    "user_archived": {
+      "category": "User Management",
+      "prefix": "user",
+      "level": "WARN",
+      "description": "User was archived",
+      "parameters": ["userid", "onuserid"]
+    },
+    "user_deleted": {
+      "category": "User Management",
+      "prefix": "user",
+      "level": "WARN",
+      "description": "User was deleted",
+      "parameters": ["userid", "onuserid"]
+    }
+  }
+}
