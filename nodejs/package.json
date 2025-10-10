@@ -1,0 +1,20 @@
+{
+  "name": "security_event_logger",
+  "version": "1.0.0",
+  "description": "OWASP Security Event Logger for Node.js",
+  "main": "security_event_logger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "owasp",
+    "security",
+    "logging",
+    "audit"
+  ],
+  "author": "security_event_logger",
+  "license": "CC0-1.0",
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}
