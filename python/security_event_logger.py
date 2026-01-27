@@ -3,10 +3,11 @@ OWASP Security Event Logger for Python
 A library for logging security events according to the OWASP Logging Vocabulary
 """
 
-import json
 import os
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
+
+import yaml
 
 
 class SecurityEventLogger:
@@ -18,7 +19,7 @@ class SecurityEventLogger:
         
         Args:
             appid: Application identifier
-            events_file: Path to security_events.json file (optional)
+            events_file: Path to security_events.yaml file (optional)
         """
         self.appid = appid
         
@@ -26,11 +27,16 @@ class SecurityEventLogger:
         if events_file is None:
             events_file = os.path.join(
                 os.path.dirname(os.path.dirname(__file__)), 
-                'security_events.json'
+                'security_events.yaml'
             )
-        
-        with open(events_file, 'r') as f:
-            self.events_def = json.load(f)['events']
+
+        with open(events_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+
+        if not isinstance(data, dict) or not isinstance(data.get('events'), dict):
+            raise ValueError(f"Invalid events definition file (expected YAML with top-level 'events' mapping): {events_file}")
+
+        self.events_def = data['events']
     
     def log_event(
         self,

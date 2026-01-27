@@ -1,5 +1,6 @@
 package com.securityeventlogger;
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -31,22 +32,22 @@ public class SecurityEventLogger {
     /**
      * Initialize the security event logger
      * @param appId Application identifier
-     * @param eventsFile Path to security_events.json file (optional)
+     * @param eventsFile Path to security_events.yaml file (optional)
      * @throws IOException if the events file cannot be read
      */
     public SecurityEventLogger(String appId, String eventsFile) throws IOException {
         this.appId = appId;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper(new YAMLFactory());
         this.eventsDef = new HashMap<>();
 
         // Load events definition
         JsonNode rootNode;
         if (eventsFile == null || eventsFile.isEmpty()) {
             // Load from classpath or default location
-            InputStream is = getClass().getClassLoader().getResourceAsStream("security_events.json");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("security_events.yaml");
             if (is == null) {
                 // Try parent directory
-                eventsFile = "../security_events.json";
+                eventsFile = "../security_events.yaml";
                 rootNode = objectMapper.readTree(Files.newInputStream(Paths.get(eventsFile)));
             } else {
                 rootNode = objectMapper.readTree(is);

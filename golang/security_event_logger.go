@@ -8,21 +8,23 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"gopkg.in/yaml.v3"
 )
 
 // EventDefinition represents a security event definition
 type EventDefinition struct {
-	Category    string   `json:"category"`
-	Prefix      string   `json:"prefix"`
-	Level       string   `json:"level"`
-	Description string   `json:"description"`
-	Parameters  []string `json:"parameters"`
+	Category    string   `yaml:"category"`
+	Prefix      string   `yaml:"prefix"`
+	Level       string   `yaml:"level"`
+	Description string   `yaml:"description"`
+	Parameters  []string `yaml:"parameters"`
 }
 
-// EventsData represents the structure of the events JSON file
+// EventsData represents the structure of the events YAML file
 type EventsData struct {
-	Version string                      `json:"version"`
-	Events  map[string]EventDefinition `json:"events"`
+	Version string                     `yaml:"version"`
+	Events  map[string]EventDefinition `yaml:"events"`
 }
 
 // LogEntry represents a security log entry
@@ -56,7 +58,7 @@ func NewSecurityEventLogger(appID string, eventsFile string) (*SecurityEventLogg
 	if eventsFile == "" {
 		// Get the path relative to this file
 		_, filename, _, _ := runtime.Caller(0)
-		eventsFile = filepath.Join(filepath.Dir(filepath.Dir(filename)), "security_events.json")
+		eventsFile = filepath.Join(filepath.Dir(filepath.Dir(filename)), "security_events.yaml")
 	}
 
 	data, err := ioutil.ReadFile(eventsFile)
@@ -65,7 +67,7 @@ func NewSecurityEventLogger(appID string, eventsFile string) (*SecurityEventLogg
 	}
 
 	var eventsData EventsData
-	if err := json.Unmarshal(data, &eventsData); err != nil {
+	if err := yaml.Unmarshal(data, &eventsData); err != nil {
 		return nil, fmt.Errorf("failed to parse events file: %w", err)
 	}
 

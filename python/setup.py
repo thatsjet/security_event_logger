@@ -7,6 +7,7 @@ setup(
     author="security_event_logger",
     license="CC0 1.0 Universal",
     py_modules=["security_event_logger"],
+    install_requires=["PyYAML>=6.0"],
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 4 - Beta",

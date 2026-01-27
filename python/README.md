@@ -63,4 +63,4 @@ The library supports all OWASP Logging Vocabulary event types including:
 - System events (sys_*)
 - And more...
 
-See `security_events.json` for the complete list of supported events.
+See `security_events.yaml` for the complete list of supported events.

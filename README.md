@@ -10,7 +10,7 @@ The goal is to simplify monitoring and alerting by using a consistent vocabulary
 
 ## Features
 
-- **Language-agnostic event definitions** stored in JSON format
+- **Language-agnostic event definitions** stored in YAML format
 - **Multi-language support**: Python, Node.js, Go, and Java
 - **Comprehensive event coverage**: Authentication, Authorization, Session Management, File Operations, User Management, and more
 - **Standardized log format** following OWASP guidelines
@@ -20,7 +20,7 @@ The goal is to simplify monitoring and alerting by using a consistent vocabulary
 
 ```
 security_event_logger/
-├── security_events.json    # Core event definitions (language-agnostic)
+├── security_events.yaml    # Core event definitions (language-agnostic)
 ├── python/                 # Python implementation
 ├── nodejs/                 # Node.js implementation
 ├── golang/                 # Go implementation
@@ -29,7 +29,7 @@ security_event_logger/
 
 ## Event Definitions
 
-All security events are defined in `security_events.json`, which serves as the single source of truth for all language implementations. This ensures consistency across different platforms.
+All security events are defined in `security_events.yaml`, which serves as the single source of truth for all language implementations. This ensures consistency across different platforms.
 
 ### Event Categories
 

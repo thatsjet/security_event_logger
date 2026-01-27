@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# VS Code (workspace-specific)
+.vscode/
+
+# Node.js
+nodejs/node_modules/
+nodejs/package-lock.json
+
+# Java / Maven
+java/target/
+
+# Python
+python/.venv/
+python/__pycache__/
+python/*.pyc
+python/*.pyo
+python/*.pyd
+python/.Python
+python/build/
+python/dist/
+python/*.egg-info/
+python/.pytest_cache/
+
+# General
+*.log

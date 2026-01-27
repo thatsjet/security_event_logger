@@ -5,23 +5,29 @@
 
 const fs = require('fs');
 const path = require('path');
+const yaml = require('js-yaml');
 
 class SecurityEventLogger {
   /**
    * Initialize the security event logger
    * @param {string} appid - Application identifier
-   * @param {string} eventsFile - Path to security_events.json file (optional)
+   * @param {string} eventsFile - Path to security_events.yaml file (optional)
    */
   constructor(appid, eventsFile = null) {
     this.appid = appid;
     
     // Load events definition
     if (!eventsFile) {
-      eventsFile = path.join(__dirname, '..', 'security_events.json');
+      eventsFile = path.join(__dirname, '..', 'security_events.yaml');
     }
     
     const eventsData = fs.readFileSync(eventsFile, 'utf8');
-    this.eventsDef = JSON.parse(eventsData).events;
+    const parsed = yaml.load(eventsData);
+    if (!parsed || typeof parsed !== 'object' || !parsed.events) {
+      throw new Error(`Invalid events definitions file (missing 'events'): ${eventsFile}`);
+    }
+
+    this.eventsDef = parsed.events;
   }
   
   /**
