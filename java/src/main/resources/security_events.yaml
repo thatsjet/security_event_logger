@@ -192,6 +192,16 @@ events:
       - "userid"
       - "metric"
       - "value"
+  malicious_sqli:
+    category: "Malicious Behavior"
+    prefix: "malicious"
+    level: "CRITICAL"
+    description: "Request input matched a SQL injection (SQLi) signature or heuristic"
+    parameters:
+      - "userid|IP"
+      - "parameter"
+      - "ruleid"
+      - "useragent"
   privilege_permissions_changed:
     category: "Privilege Changes"
     prefix: "privilege"
