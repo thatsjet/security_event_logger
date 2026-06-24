@@ -2,11 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="security_event_logger",
-    version="1.0.0",
+    version="1.1.0",
     description="OWASP Security Event Logger for Python",
     author="security_event_logger",
     license="CC0 1.0 Universal",
-    py_modules=["security_event_logger"],
+    packages=find_packages(),
+    include_package_data=True,
+    package_data={"security_event_logger": ["security_events.yaml"]},
     install_requires=["PyYAML>=6.0"],
     python_requires=">=3.6",
     classifiers=[

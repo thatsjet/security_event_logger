@@ -13,10 +13,10 @@ java/target/
 
 # Python
 python/.venv/
-python/__pycache__/
-python/*.pyc
-python/*.pyo
-python/*.pyd
+python/**/__pycache__/
+python/**/*.pyc
+python/**/*.pyo
+python/**/*.pyd
 python/.Python
 python/build/
 python/dist/

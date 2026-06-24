@@ -10,25 +10,41 @@ from typing import Dict, List, Optional, Any
 import yaml
 
 
+def _default_events_file() -> str:
+    """Resolve the bundled security_events.yaml.
+
+    Prefers the repo-root canonical file when running from a source checkout
+    (single source of truth during development); falls back to the copy shipped
+    inside the installed package. The flat ``py_modules`` layout used before 1.1
+    could not ship the YAML at all, so installed use raised FileNotFoundError —
+    this package layout fixes that via ``package_data``.
+    """
+    here = os.path.dirname(__file__)
+    candidates = [
+        # repo-root canonical: <repo>/security_events.yaml (dev checkout)
+        os.path.join(os.path.dirname(os.path.dirname(here)), "security_events.yaml"),
+        # packaged copy: <site-packages>/security_event_logger/security_events.yaml
+        os.path.join(here, "security_events.yaml"),
+    ]
+    return next((p for p in candidates if os.path.exists(p)), candidates[-1])
+
+
 class SecurityEventLogger:
     """Logger for OWASP security events"""
-    
+
     def __init__(self, appid: str, events_file: Optional[str] = None):
         """
         Initialize the security event logger
-        
+
         Args:
             appid: Application identifier
             events_file: Path to security_events.yaml file (optional)
         """
         self.appid = appid
-        
+
         # Load events definition
         if events_file is None:
-            events_file = os.path.join(
-                os.path.dirname(os.path.dirname(__file__)), 
-                'security_events.yaml'
-            )
+            events_file = _default_events_file()
 
         with open(events_file, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
@@ -37,7 +53,7 @@ class SecurityEventLogger:
             raise ValueError(f"Invalid events definition file (expected YAML with top-level 'events' mapping): {events_file}")
 
         self.events_def = data['events']
-    
+
     def log_event(
         self,
         event_type: str,
@@ -57,7 +73,7 @@ class SecurityEventLogger:
     ) -> Dict[str, Any]:
         """
         Log a security event
-        
+
         Args:
             event_type: Type of event (e.g., 'authn_login_success')
             params: List of parameters for the event
@@ -73,20 +89,20 @@ class SecurityEventLogger:
             region: Region/datacenter
             geo: Geographic location
             **kwargs: Additional custom fields
-            
+
         Returns:
             Dictionary containing the log event
         """
         if event_type not in self.events_def:
             raise ValueError(f"Unknown event type: {event_type}")
-        
+
         event_def = self.events_def[event_type]
-        
+
         # Build event string
         event_str = event_type
         if params:
             event_str += ":" + ",".join(str(p) for p in params)
-        
+
         # Build log entry
         log_entry = {
             "datetime": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S%z"),
@@ -95,7 +111,7 @@ class SecurityEventLogger:
             "level": event_def['level'],
             "description": description or event_def['description']
         }
-        
+
         # Add optional fields
         if useragent:
             log_entry['useragent'] = useragent
@@ -117,34 +133,34 @@ class SecurityEventLogger:
             log_entry['region'] = region
         if geo:
             log_entry['geo'] = geo
-        
+
         # Add any additional custom fields
         log_entry.update(kwargs)
-        
+
         return log_entry
-    
+
     def get_event_info(self, event_type: str) -> Dict[str, Any]:
         """
         Get information about an event type
-        
+
         Args:
             event_type: Type of event
-            
+
         Returns:
             Dictionary with event information
         """
         if event_type not in self.events_def:
             raise ValueError(f"Unknown event type: {event_type}")
-        
+
         return self.events_def[event_type]
-    
+
     def list_events(self, category: Optional[str] = None) -> List[str]:
         """
         List available event types
-        
+
         Args:
             category: Optional category filter
-            
+
         Returns:
             List of event type names
         """
