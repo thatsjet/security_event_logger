@@ -1,8 +1,12 @@
 {
   "name": "security_event_logger",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "OWASP Security Event Logger for Node.js",
   "main": "security_event_logger.js",
+  "files": [
+    "security_event_logger.js",
+    "security_events.yaml"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

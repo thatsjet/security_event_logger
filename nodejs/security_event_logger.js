@@ -7,6 +7,26 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
+/**
+ * Resolve the bundled security_events.yaml.
+ *
+ * Prefers the repo-root canonical file when running from a source checkout
+ * (single source of truth during development); falls back to the copy shipped
+ * inside the published package. Reaching outside the package dir (the prior
+ * `../security_events.yaml`-only behavior) meant `npm publish` shipped without
+ * the vocabulary — the bundled copy plus the "files" entry in package.json
+ * fixes that.
+ */
+function defaultEventsFile() {
+  const candidates = [
+    // repo-root canonical: <repo>/security_events.yaml (dev checkout)
+    path.join(__dirname, '..', 'security_events.yaml'),
+    // packaged copy: <node_modules>/security_event_logger/security_events.yaml
+    path.join(__dirname, 'security_events.yaml'),
+  ];
+  return candidates.find(p => fs.existsSync(p)) || candidates[candidates.length - 1];
+}
+
 class SecurityEventLogger {
   /**
    * Initialize the security event logger
@@ -18,7 +38,7 @@ class SecurityEventLogger {
     
     // Load events definition
     if (!eventsFile) {
-      eventsFile = path.join(__dirname, '..', 'security_events.yaml');
+      eventsFile = defaultEventsFile();
     }
     
     const eventsData = fs.readFileSync(eventsFile, 'utf8');

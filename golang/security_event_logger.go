@@ -1,16 +1,23 @@
 package securityeventlogger
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 
 	"gopkg.in/yaml.v3"
 )
+
+// embeddedEvents holds the OWASP vocabulary compiled into the binary at build
+// time. The Go module boundary is this directory, so the repo-root
+// security_events.yaml is not fetched by `go get`; embedding a local copy makes
+// the package work as an imported dependency.
+//
+//go:embed security_events.yaml
+var embeddedEvents []byte
 
 // EventDefinition represents a security event definition
 type EventDefinition struct {
@@ -55,15 +62,16 @@ type SecurityEventLogger struct {
 
 // NewSecurityEventLogger creates a new security event logger
 func NewSecurityEventLogger(appID string, eventsFile string) (*SecurityEventLogger, error) {
+	var data []byte
 	if eventsFile == "" {
-		// Get the path relative to this file
-		_, filename, _, _ := runtime.Caller(0)
-		eventsFile = filepath.Join(filepath.Dir(filepath.Dir(filename)), "security_events.yaml")
-	}
-
-	data, err := ioutil.ReadFile(eventsFile)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read events file: %w", err)
+		// Default to the vocabulary embedded at build time.
+		data = embeddedEvents
+	} else {
+		var err error
+		data, err = ioutil.ReadFile(eventsFile)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read events file: %w", err)
+		}
 	}
 
 	var eventsData EventsData
